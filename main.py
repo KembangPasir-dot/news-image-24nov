@@ -18,8 +18,14 @@ def main() -> int:
         return 1
     src = Path(__file__).resolve().parent / "entry.png"
     dst = Path(out_dir) / "entry.png"
-    dst.parent.mkdir(parents=True, exist_ok=True)
+    os.makedirs(out_dir, exist_ok=True)
     shutil.copyfile(src, dst)
+    if dst.stat().st_size != src.stat().st_size:
+        print(
+            f"copy size mismatch: {dst.stat().st_size} != {src.stat().st_size}",
+            file=sys.stderr,
+        )
+        return 1
     return 0
 
 
